@@ -1,0 +1,42 @@
+syntax = "proto3";
+package pb;
+option go_package = "internal/infra/grpc/pb";
+
+import "google/protobuf/any.proto";
+
+message DependsOn {
+  string service = 1;
+  string source = 2;
+}
+
+message CreateConfigRequest {
+  string name = 1;
+  bool active = 2;
+  string frequency = 3;
+  string service = 4;
+  string source = 5;
+  string context = 6;
+  repeated DependsOn depends_on = 7;
+  map<string, google.protobuf.Any> serviceParameters = 8;
+  map<string, google.protobuf.Any> jobParameters = 9;
+}
+
+message CreateConfigResponse {
+  string id = 1;
+  string name = 2;
+  bool active = 3;
+  string frequency = 4;
+  string service = 5;
+  string source = 6;
+  string context = 7;
+  repeated DependsOn depends_on = 8;
+  map<string, google.protobuf.Any> serviceParameters = 9;
+  map<string, google.protobuf.Any> jobParameters = 10;
+  string created_at = 11;
+  string updated_at = 12;
+}
+
+service ConfigService {
+  rpc CreateConfig(CreateConfigRequest) returns (CreateConfigResponse);
+}
+

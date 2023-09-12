@@ -1,0 +1,76 @@
+{
+  "name": "transformers-spark-batch",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/transformers/spark-batch/spark_batch",
+  "targets": {
+    "lock": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "apps/transformers/spark-batch"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "apps/transformers/spark-batch/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:flake8",
+      "outputs": [
+        "{workspaceRoot}/reports/apps/transformers/spark-batch/pylint.txt"
+      ],
+      "options": {
+        "outputFile": "reports/apps/transformers/spark-batch/pylint.txt"
+      }
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/apps/transformers/spark-batch/unittests",
+        "{workspaceRoot}/coverage/apps/transformers/spark-batch"
+      ],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "apps/transformers/spark-batch"
+      }
+    },
+    "image": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "docker build -t fabiocaffarello/transformers-spark-batch:latest --build-arg SERVICE_NAME=spark-batch --build-arg CONTEXT_ENV={args.contextEnv} --build-arg GATEWAY_ENVIRONMENT=true --build-arg RABBITMQ_GATEWAY_HOST=rabbitmq --build-arg RABBITMQ_PORT_6572_TCP=tcp://guest:guest@gateway_host:5672/ --build-arg LAKE_CONTROLLER_GATEWAY_HOST=lake-controller --build-arg LAKE_CONTROLLER_PORT_8000_TCP=tcp://gateway_host:8000 --build-arg MINIO_GATEWAY_HOST=minio --build-arg MINIO_PORT_9000_TCP=gateway_host:9000 --build-arg MINIO_ACCESS_KEY=new-minio-root-user --build-arg MINIO_SECRET_KEY=new-minio-root-password -f ./Dockerfile .",
+        "cwd": "apps/transformers/spark-batch"
+      }
+    }
+  },
+  "tags": ["scope:lake-transformers", "lang:python"]
+}
