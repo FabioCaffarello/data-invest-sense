@@ -10,12 +10,14 @@ import (
 
 type UnzipFileUseCase struct {
 	contextEnv  string
+     minioEndpoint string
 	MinioClient minio.MinioClient
 }
 
 func NewUnzipFileUseCase(contextEnv string) *UnzipFileUseCase {
 	return &UnzipFileUseCase{
 		contextEnv: contextEnv,
+          minioEndpoint: os.Getenv("MINIO_ENDPOINT"),
 		MinioClient: *minio.NewMinioClient(
 			os.Getenv("MINIO_ENDPOINT"),
 			os.Getenv("MINIO_ACCESS_KEY"),
@@ -71,8 +73,11 @@ func (ufu *UnzipFileUseCase) unzipAndUpload(zipData []byte, bucketName, partitio
 		if err != nil {
 			return []string{}, err
 		}
-		uriUploadedFiles = append(uriUploadedFiles, uri)
+          documentURI := fmt.Sprintf("s3a://%s/%s/%s", ufu.minioEndpoint, bucketName, uri)
+		uriUploadedFiles = append(uriUploadedFiles, documentURI)
 	}
 
 	return uriUploadedFiles, nil
 }
+
+

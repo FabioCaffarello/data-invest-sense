@@ -12,10 +12,6 @@ readme = "README.md"
     path = "apps/ingestors/file-downloader"
     develop = true
 
-    [tool.poetry.dependencies.pyrepository]
-    path = "libs/python/pyrepository"
-    develop = true
-
     [tool.poetry.dependencies.pylog]
     path = "libs/python/pylog"
     develop = true
@@ -54,6 +50,46 @@ readme = "README.md"
 
     [tool.poetry.dependencies.spark-batch]
     path = "apps/transformers/spark-batch"
+    develop = true
+
+    [tool.poetry.dependencies.dto-controller]
+    path = "libs/dtos/python/dto-controller"
+    develop = true
+
+    [tool.poetry.dependencies.config-loader]
+    path = "libs/service-setup/python/config-loader"
+    develop = true
+
+    [tool.poetry.dependencies.py-lake-catalog]
+    path = "libs/api-client/python/py-lake-catalog"
+    develop = true
+
+    [tool.poetry.dependencies.dto-lake-catalog]
+    path = "libs/dtos/python/dto-lake-catalog"
+    develop = true
+
+    [tool.poetry.dependencies.dto-serializer]
+    path = "libs/dtos/python/serializer"
+    develop = true
+
+    [tool.poetry.dependencies.input-serializer]
+    path = "libs/service-setup/python/input-serializer"
+    develop = true
+
+    [tool.poetry.dependencies.py-repository]
+    path = "libs/api-client/python/py-repository"
+    develop = true
+
+    [tool.poetry.dependencies.dto-repository]
+    path = "libs/dtos/python/dto-repository"
+    develop = true
+
+    [tool.poetry.dependencies.dto-events]
+    path = "libs/dtos/python/dto-events"
+    develop = true
+
+    [tool.poetry.dependencies.dto-gateway]
+    path = "libs/dtos/python/dto-gateway"
     develop = true
 
 [tool.poetry.group.dev.dependencies]

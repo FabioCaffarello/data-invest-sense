@@ -3,9 +3,13 @@ go 1.20
 use (
 	apps/apis/lake-manager
 	apps/ingestors/file-unzipper
+	apps/lake-governance/jobs-lineage
+	apps/lake-governance/lake-catalog
+	apps/lake-governance/treatment/domain-registry
 	apps/lake-orchestration/lake-controller
 	apps/lake-orchestration/lake-events
 	apps/lake-orchestration/lake-gateway
+	apps/lake-orchestration/lake-outputs
 	apps/lake-orchestration/lake-repository
 	libs/api-client/golang/go-controller
 	libs/api-client/golang/go-gateway
@@ -13,7 +17,11 @@ use (
 	libs/dtos/golang/dto-controller
 	libs/dtos/golang/dto-events
 	libs/dtos/golang/dto-gateway
+	libs/dtos/golang/dto-jobs-lineage
+	libs/dtos/golang/dto-lake-catalog
+	libs/dtos/golang/dto-lake-outputs
 	libs/dtos/golang/dto-repository
+	libs/dtos/golang/dto-treatment-domain-registry
 	libs/golang/events
 	libs/golang/go-config
 	libs/golang/go-json-schema

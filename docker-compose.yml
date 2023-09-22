@@ -13,9 +13,9 @@ services:
       RABBITMQ_DEFAULT_VHOST: /
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 10s
+      interval: 15s
       timeout: 10s
-      retries: 3
+      retries: 2
     networks:
       - invest-sense-network
 
@@ -81,7 +81,7 @@ services:
     container_name: lake-controller
     ports:
       - 8002:8000
-      - 50052:50051
+      - 50054:50051
       - 4002:4000
     depends_on:
       rabbitmq:
@@ -115,6 +115,14 @@ services:
         condition: service_healthy
       lake-controller:
         condition: service_healthy
+    networks:
+      - invest-sense-network
+
+  lake-catalog:
+    image: fabiocaffarello/lake-catalog:latest
+    container_name: lake-catalog
+    ports:
+      - 8004:8000
     networks:
       - invest-sense-network
 
@@ -222,6 +230,70 @@ services:
     networks:
       - invest-sense-network
 
+  spark-batch-master:
+    image: fabiocaffarello/transformers-spark-batch:latest
+    container_name: spark-batch-master
+    depends_on:
+      - rabbitmq
+    networks:
+      - invest-sense-network
+
+  spark:
+    image: bitnami/spark:latest
+    container_name: spark
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_REMOTE="sc://localhost"
+      - SPARK_USER=spark
+    ports:
+      - '8089:8080'
+
+  spark-worker-1:
+    image: bitnami/spark:latest
+    container_name: spark-worker-1
+    depends_on:
+      - spark
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+
+  spark-worker-2:
+    image: bitnami/spark:latest
+    container_name: spark-worker-2
+    depends_on:
+      - spark
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+
+  # jupyter:
+  #   image: jupyter/base-notebook
+  #   container_name: jupyter
+  #   ports:
+  #     - '8888:8888'
+  #   volumes:
+  #     - ./notebooks:/home/jovyan/work  # Mount a directory with your Jupyter notebooks
+
+  #   environment:
+  #     - SPARK_MASTER_URL=spark://spark:7077
 
 networks:
   invest-sense-network:

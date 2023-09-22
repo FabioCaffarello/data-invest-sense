@@ -56,6 +56,7 @@ func main() {
 	webserver.AddHandler("/schemas", "GET", "/schemas", webSchemaHandler.ListAllSchemas)
 	webserver.AddHandler("/schemas", "GET", "/schemas/{id}", webSchemaHandler.ListOneSchemaById)
 	webserver.AddHandler("/schemas", "GET", "/schemas/service/{service}", webSchemaHandler.ListAllSchemasByService)
+     webserver.AddHandler("/schemas", "GET", "/schemas/service/{service}/source/{source}/schema-type/{schemaType}", webSchemaHandler.ListOneSchemaByServiceSourceAndSchemaType)
 
 	fmt.Println("Server is running on port", configs.WebServerPort)
 	go webserver.Start()

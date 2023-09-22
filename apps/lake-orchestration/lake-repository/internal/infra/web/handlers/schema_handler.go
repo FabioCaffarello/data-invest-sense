@@ -113,3 +113,24 @@ func (h *WebSchemaHandler) ListAllSchemasByService(w http.ResponseWriter, r *htt
 		return
 	}
 }
+
+func (h *WebSchemaHandler) ListOneSchemaByServiceSourceAndSchemaType(w http.ResponseWriter, r *http.Request) {
+     service := chi.URLParam(r, "service")
+     source := chi.URLParam(r, "source")
+     schemaType := chi.URLParam(r, "schemaType")
+     listOneSchemaByServiceSourceAndSchemaType := usecase.NewListOneSchemaByServiceSourceAndSchemaTypeUseCase(
+          h.SchemaRepository,
+     )
+
+     output, err := listOneSchemaByServiceSourceAndSchemaType.Execute(service, source, schemaType)
+     if err != nil {
+          http.Error(w, err.Error(), http.StatusInternalServerError)
+          return
+     }
+
+     err = json.NewEncoder(w).Encode(output)
+     if err != nil {
+          http.Error(w, err.Error(), http.StatusInternalServerError)
+          return
+     }
+}

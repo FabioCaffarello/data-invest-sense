@@ -53,6 +53,7 @@ func (sr *SchemaRepository) SaveSchema(schema *entity.Schema) error {
 			"id":          schema.ID,
 			"schema_type": schema.SchemaType,
 			"json_schema": schema.JsonSchema,
+               "source":      schema.Source,
 			"service":     schema.Service,
 			"schema_id":   schema.SchemaID,
 			"created_at":  schema.CreatedAt,
@@ -69,6 +70,7 @@ func (sr *SchemaRepository) SaveSchema(schema *entity.Schema) error {
 				"schema_type": schema.SchemaType,
 				"json_schema": schema.JsonSchema,
 				"service":     schema.Service,
+                    "source":      schema.Source,
 				"schema_id":   schema.SchemaID,
 				"created_at":  existingSchema.CreatedAt,
 				"updated_at":  schema.UpdatedAt,
@@ -131,4 +133,20 @@ func (sr *SchemaRepository) FindAllByService(service string) ([]*entity.Schema, 
 		return nil, err
 	}
 	return results, nil
+}
+
+func (sr *SchemaRepository) FindOneByServiceSourceAndSchemaType(service string, source string, schemaType string) (*entity.Schema, error) {
+     filter := bson.M{"service": service, "source": source, "schema_type": schemaType}
+     existingDoc := sr.Collection.FindOne(context.Background(), filter)
+     // Check if the document does not exist
+     if existingDoc.Err() != nil {
+          return nil, existingDoc.Err()
+     }
+
+     var result entity.Schema
+     if err := existingDoc.Decode(&result); err != nil {
+          return nil, err
+     }
+
+     return &result, nil
 }

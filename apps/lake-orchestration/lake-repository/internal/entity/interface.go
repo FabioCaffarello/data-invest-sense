@@ -5,4 +5,5 @@ type SchemaInterface interface {
      FindOneById(id string) (*Schema, error)
      FindAll() ([]*Schema, error)
      FindAllByService(service string) ([]*Schema, error)
+     FindOneByServiceSourceAndSchemaType(service string, source string, schemaType string) (*Schema, error)
 }

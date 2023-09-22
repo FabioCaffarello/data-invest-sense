@@ -1,44 +1,45 @@
 import asyncio
+import os
+from typing import List
+
+from config_loader.loader import fetch_configs
+from consumer.consumer import EventConsumer
 from pylog.log import setup_logging
 from pyrabbit.consumer import RabbitMQConsumer
-from pysd.service_discovery import new_from_env
-from consumer.event import Event
-from controller.controller import Controller
-from configs.loader import fetch_configs
+from pysd.service_discovery import ServiceDiscovery, new_from_env
 
 logger = setup_logging(__name__, log_level="DEBUG")
 
 
-async def consume_messages(sd, configs):
+QUEUE_ACTIVE_JOBS = asyncio.Queue()
+SERVICE_NAME = os.getenv("SERVICE_NAME")
+CONTEXT_ENV = os.getenv("CONTEXT_ENV")
+
+
+async def create_consumers_channel(sd: ServiceDiscovery) -> List[asyncio.Task]:
+    configs = await fetch_configs(SERVICE_NAME, CONTEXT_ENV)
     rabbitmq_service = RabbitMQConsumer(url=sd.rabbitmq_endpoint())
     await rabbitmq_service.connect()
     tasks = list()
 
-    for _context, context_configs in configs.items():
-        for config_name, config in context_configs.items():
-            queue_name = f"{_context}.{config.jobMetadataParams.service}.inputs.{config.jobMetadataParams.source}"
-            exchange_name = "services"
-            routing_key = f"{config.jobMetadataParams.service}.inputs.{config.jobMetadataParams.source}"
+    for _, context_configs in configs.items():
+        for _, config in context_configs.items():
+            logger.info(f"Creating consumer for config: {config.id}")
+            tasks.append(
+                asyncio.create_task(
+                    EventConsumer(sd, rabbitmq_service, config, QUEUE_ACTIVE_JOBS).run()
+                )
+            )
+    return tasks
 
-            aio_queue = asyncio.Queue()
-            tasks.append(
-                asyncio.create_task(Event.consume_queue(config, rabbitmq_service, exchange_name, queue_name, routing_key, aio_queue))
-            )
-            tasks.append(
-                asyncio.create_task(Controller(config, aio_queue, rabbitmq_service).consume())
-            )
-    await asyncio.gather(*tasks)
-    for task in tasks:
-        task.cancel()
-    await rabbitmq_service.close_connection()
 
 async def main():
-    logger.info("Starting File Downloader Service")
+    logger.info(f"Starting {SERVICE_NAME} service")
+
     sd = new_from_env()
-    configs = await fetch_configs()
+    tasks = await create_consumers_channel(sd)
 
-    await consume_messages(sd, configs)
-
+    await asyncio.gather(*tasks)
 
 
 if __name__ == "__main__":

@@ -42,6 +42,7 @@ func (csu *CreateSchemaUseCase) Execute(schema inputDTO.SchemaDTO) (outputDTO.Sc
 		ID:         string(schemaEntity.ID),
 		SchemaType: schemaEntity.SchemaType,
 		Service:    schemaEntity.Service,
+          Source:     schemaEntity.Source,
 		JsonSchema: schemaEntity.JsonSchema,
 		SchemaID:   string(schemaEntity.SchemaID),
 		CreatedAt:  schemaEntity.CreatedAt,

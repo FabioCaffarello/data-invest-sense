@@ -23,17 +23,10 @@ readme = "README.md"
   [tool.poetry.dependencies]
   python = ">=3.9,<3.11"
   requests = "^2.31.0"
-
-    [tool.poetry.dependencies.pyrepository]
-    path = "../../../libs/python/pyrepository"
-    develop = true
+  warlock = "^2.0.1"
 
     [tool.poetry.dependencies.pylog]
     path = "../../../libs/python/pylog"
-    develop = true
-
-    [tool.poetry.dependencies.pydotenv]
-    path = "../../../libs/python/pydotenv"
     develop = true
 
     [tool.poetry.dependencies.core]
@@ -48,12 +41,28 @@ readme = "README.md"
     path = "../../../libs/python/pysd"
     develop = true
 
-    [tool.poetry.dependencies.py-controller]
-    path = "../../../libs/api-client/python/py-controller"
-    develop = true
-
     [tool.poetry.dependencies.py-minio]
     path = "../../../libs/storage-client/python/py-minio"
+    develop = true
+
+    [tool.poetry.dependencies.config-loader]
+    path = "../../../libs/service-setup/python/config-loader"
+    develop = true
+
+    [tool.poetry.dependencies.py-repository]
+    path = "../../../libs/api-client/python/py-repository"
+    develop = true
+
+    [tool.poetry.dependencies.dto-events]
+    path = "../../../libs/dtos/python/dto-events"
+    develop = true
+
+    [tool.poetry.dependencies.dto-gateway]
+    path = "../../../libs/dtos/python/dto-gateway"
+    develop = true
+
+    [tool.poetry.dependencies.dto-serializer]
+    path = "../../../libs/dtos/python/serializer"
     develop = true
 
 [build-system]
