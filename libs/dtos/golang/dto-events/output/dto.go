@@ -1,7 +1,7 @@
 package output
 
 import (
-	sharedDTO "libs/dtos/golang/dto-gateway/shared"
+	sharedDTO "libs/dtos/golang/dto-events/shared"
 )
 
 type ServiceFeedbackDTO struct {

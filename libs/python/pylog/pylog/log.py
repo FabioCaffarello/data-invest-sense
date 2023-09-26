@@ -22,7 +22,7 @@ def setup_logging(
         The logger.
     """
     log_handler = logging.StreamHandler()
-    formatter = jsonlogger.JsonFormatter("%(levelname)s %(message)s ")
+    formatter = jsonlogger.JsonFormatter("%(levelname)s %(filename)s %(message)s ")
     log_handler.setFormatter(formatter)
 
     logger = logging.getLogger(module_name)

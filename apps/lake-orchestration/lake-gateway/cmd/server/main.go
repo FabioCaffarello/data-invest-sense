@@ -56,12 +56,12 @@ func main() {
 	webInputStatusHandler := NewWebInputStatusHandler(client, eventDispatcher, configs.DBName)
      webStagingJobHandler := NewWebStagingJobHandler(client, configs.DBName)
 
-	webserver.AddHandler("/inputs", "POST", "/service/{service}/source/{source}", webInputHandler.CreateInput)
-     // webserver.AddHandler("/inputs", "POST", "/service/{service}/source/{source}/processing-id/{processingId}", webInputHandler.CreateInputWithProcessingId)
-	webserver.AddHandler("/inputs", "GET", "/service/{service}/source/{source}", webInputHandler.ListAllByServiceAndSource)
-	webserver.AddHandler("/inputs", "GET", "/service/{service}", webInputHandler.ListAllByService)
-	webserver.AddHandler("/inputs", "POST", "/service/{service}/source/{source}/{id}", webInputStatusHandler.UpdateStatus)
-	webserver.AddHandler("/inputs", "GET", "/service/{service}/source/{source}/{id}", webInputHandler.ListOneByIdAndService)
+	webserver.AddHandler("/inputs", "POST", "/inputs/service/{service}/source/{source}", webInputHandler.CreateInput)
+     // webserver.AddHandler("/inputs", "POST", "/inputs/service/{service}/source/{source}/processing-id/{processingId}", webInputHandler.CreateInputWithProcessingId)
+	webserver.AddHandler("/inputs", "GET", "/inputs/service/{service}/source/{source}", webInputHandler.ListAllByServiceAndSource)
+	webserver.AddHandler("/inputs", "GET", "/inputs/service/{service}", webInputHandler.ListAllByService)
+	webserver.AddHandler("/inputs", "POST", "/inputs/service/{service}/source/{source}/{id}", webInputStatusHandler.UpdateStatus)
+	webserver.AddHandler("/inputs", "GET", "/inputs/service/{service}/source/{source}/{id}", webInputHandler.ListOneByIdAndService)
 
      webserver.AddHandler("/staging", "POST", "/staging-jobs", webStagingJobHandler.CreateStagingJob)
      webserver.AddHandler("/staging", "DELETE", "/staging-jobs/{id}", webStagingJobHandler.RemoveStagingJob)

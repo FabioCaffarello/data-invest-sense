@@ -1,0 +1,63 @@
+{
+  "name": "lake-governance-lake-catalog",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/lake-governance/lake-catalog",
+  "targets": {
+    "build": {
+      "executor": "@nx-go/nx-go:build",
+      "options": {
+        "outputPath": "dist/apps/lake-governance/lake-catalog",
+        "main": "apps/lake-governance/lake-catalog/cmd/server/main.go"
+      }
+    },
+    "serve": {
+      "executor": "@nx-go/nx-go:serve",
+      "options": {
+        "main": "apps/lake-governance/lake-catalog/cmd/server/main.go"
+      }
+    },
+    "test": {
+      "executor": "@nx-go/nx-go:test"
+    },
+    "lint": {
+      "executor": "@nx-go/nx-go:lint"
+    },
+    "go-tidy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go mod tidy",
+        "cwd": "apps/lake-governance/lake-catalog"
+      }
+    },
+    "wire": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wire",
+        "cwd": "apps/lake-governance/lake-catalog/cmd/server"
+      }
+    },
+    "build-go": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "go-tidy",
+        "wire"
+      ],
+      "options": {
+        "command": "GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -ldflags=\"-w -s\" -o dist/server ./cmd/server/main.go ./cmd/server/wire_gen.go",
+        "cwd": "apps/lake-governance/lake-catalog"
+      }
+    },
+    "image": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "build-go"
+      ],
+      "options": {
+        "command": "docker build -t fabiocaffarello/lake-catalog:latest -f ./Dockerfile.prod .",
+        "cwd": "apps/lake-governance/lake-catalog"
+      }
+    }
+  },
+  "tags": []
+}

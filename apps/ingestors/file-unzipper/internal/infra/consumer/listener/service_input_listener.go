@@ -38,22 +38,22 @@ func NewServiceInputListener(contextEnv string, serviceName string) *ServiceInpu
 
 func (l *ServiceInputListener) Handle(rabbitMQ *queue.RabbitMQ, exchange string, msg amqp.Delivery) error {
 	var serviceInputDTO gatewayOutputDTO.InputDTO
-     log.Printf("ServiceInputListener.Handle: msg.Body=%s", msg.Body)
+	log.Printf("ServiceInputListener.Handle: msg.Body=%s", msg.Body)
 	err := json.Unmarshal(msg.Body, &serviceInputDTO)
 	if err != nil {
 		return ErrorInvalidServiceInputDTO
 	}
 	source := serviceInputDTO.Metadata.Source
-	uri := serviceInputDTO.Data["uri"].(string)
+	uri := serviceInputDTO.Data["documentUri"].(string)
 	partition := serviceInputDTO.Data["partition"].(string)
-     log.Printf("ServiceInputListener.Handle: uri=%s, partition=%s, source=%s", uri, partition, source)
+	log.Printf("ServiceInputListener.Handle: uri=%s, partition=%s, source=%s", uri, partition, source)
 
 	unzipFileUseCase := usecase.NewUnzipFileUseCase(l.ContextEnv)
 
 	uris, err := unzipFileUseCase.Execute(uri, partition, source)
 	var serviceFeedbackDTO eventsInputDTO.ServiceFeedbackDTO
 	if err != nil {
-          log.Printf("ServiceInputListener.Handle: err=%s", err)
+		log.Printf("ServiceInputListener.Handle: err=%s", err)
 		uriResult := ""
 		serviceFeedbackDTO = l.getServiceOutputDTO(uri, uriResult, partition, serviceInputDTO, StatusCodeError, StatusDetailError)
 		jsonOutput, _ := json.Marshal(serviceFeedbackDTO)
@@ -63,12 +63,12 @@ func (l *ServiceInputListener) Handle(rabbitMQ *queue.RabbitMQ, exchange string,
 		}
 
 	} else {
-          log.Printf("ServiceInputListener.Handle: uris=%s", uris)
+		log.Printf("ServiceInputListener.Handle: uris=%s", uris)
 		for _, uriResult := range uris {
-               log.Printf("ServiceInputListener.Handle: uriResult=%s", uriResult)
+			log.Printf("ServiceInputListener.Handle: uriResult=%s", uriResult)
 			serviceFeedbackDTO = l.getServiceOutputDTO(uri, uriResult, partition, serviceInputDTO, statusCodeOK, statusDetailOK)
 			jsonOutput, _ := json.Marshal(serviceFeedbackDTO)
-               log.Printf("ServiceInputListener.Handle: jsonOutput=%s", jsonOutput)
+			log.Printf("ServiceInputListener.Handle: jsonOutput=%s", jsonOutput)
 			err = DispatchOutput(rabbitMQ, exchange, jsonOutput)
 			if err != nil {
 				return ErrorCouldNotNotifyServiceFeedback
@@ -89,14 +89,14 @@ func DispatchOutput(rabbitMQ *queue.RabbitMQ, exchange string, jsonOutput []byte
 	if err != nil {
 		return err
 	}
-     return nil
+	return nil
 }
 
 func (l *ServiceInputListener) getServiceOutputDTO(uriOrigin string, uriResult string, partition string, serviceInputDTO gatewayOutputDTO.InputDTO, statusCode int, StatusDetail string) eventsInputDTO.ServiceFeedbackDTO {
 	return eventsInputDTO.ServiceFeedbackDTO{
 		Data: map[string]interface{}{
-			"uri":       uriResult,
-			"partition": partition,
+			"documentUri": uriResult,
+			"partition":   partition,
 		},
 		Metadata: l.getJobMetadataDTO(uriOrigin, serviceInputDTO),
 		Status: eventsSharedDTO.Status{
@@ -118,6 +118,7 @@ func (l *ServiceInputListener) getJobMetadataDTO(uriOrigin string, serviceInputD
 				Controller: serviceInputDTO.Metadata.Source, // inputs in file-unzipper are always from controller
 			},
 		},
+		Context: l.ContextEnv,
 		Service: eventsSharedDTO.MetadataInputOrigin{
 			Gateway:    serviceInputDTO.Metadata.Service,
 			Controller: l.ServiceName,

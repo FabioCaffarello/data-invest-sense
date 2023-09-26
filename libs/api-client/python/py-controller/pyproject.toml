@@ -31,6 +31,14 @@ readme = "README.md"
     path = "../../../python/pysd"
     develop = true
 
+    [tool.poetry.dependencies.dto-controller]
+    path = "../../../dtos/python/dto-controller"
+    develop = true
+
+    [tool.poetry.dependencies.dto-serializer]
+    path = "../../../dtos/python/serializer"
+    develop = true
+
 [build-system]
 requires = [ "poetry-core" ]
 build-backend = "poetry.core.masonry.api"

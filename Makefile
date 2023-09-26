@@ -13,3 +13,6 @@ logs: run
 
 set-controller-configs:
   npx nx g @nx-plugins/repo-settings:controller-configs
+
+docs:
+  npx nx graph --file=docs/depenency-graph/index.html

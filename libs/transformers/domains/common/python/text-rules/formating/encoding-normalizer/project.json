@@ -1,0 +1,68 @@
+{
+  "name": "transformers-domains-common-python-text-rules-formating-encoding-normalizer",
+  "$schema": "../../../../../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/transformers/domains/common/python/text-rules/formating/encoding-normalizer/normalizer",
+  "targets": {
+    "lock": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "libs/transformers/domains/common/python/text-rules/formating/encoding-normalizer"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "libs/transformers/domains/common/python/text-rules/formating/encoding-normalizer/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:flake8",
+      "outputs": [
+        "{workspaceRoot}/reports/libs/transformers/domains/common/python/text-rules/formating/encoding-normalizer/pylint.txt"
+      ],
+      "options": {
+        "outputFile": "reports/libs/transformers/domains/common/python/text-rules/formating/encoding-normalizer/pylint.txt"
+      }
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/libs/transformers/domains/common/python/text-rules/formating/encoding-normalizer/unittests",
+        "{workspaceRoot}/coverage/libs/transformers/domains/common/python/text-rules/formating/encoding-normalizer"
+      ],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "libs/transformers/domains/common/python/text-rules/formating/encoding-normalizer"
+      }
+    }
+  },
+  "tags": []
+}

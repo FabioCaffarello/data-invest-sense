@@ -81,10 +81,17 @@
         "cwd": "apps/lake-orchestration/lake-controller"
       }
     },
+    "swag-doc": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx --yes snippet-enricher-cli@0.0.8 --input=docs/openapi/swagger.yaml > docs/openapi/openapi.json",
+        "cwd": "apps/lake-orchestration/lake-controller"
+      }
+    },
     "controller-configs": {
         "executor": "@data-invest-sense/repo-settings:controller-configs",
         "cwd": "apps/lake-orchestration/lake-controller"
-    },
-    "tags": ["scope:lake-orchestration", "lang:go"]
-  }
+    }
+  },
+  "tags": ["scope:lake-orchestration", "lang:go"]
 }

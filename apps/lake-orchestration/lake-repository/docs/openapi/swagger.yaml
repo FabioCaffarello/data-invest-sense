@@ -1,0 +1,179 @@
+swagger: "2.0"
+host: "localhost:8003"
+basePath: "/"
+definitions:
+  inputDTO.SchemaDTO:
+    properties:
+      schema_type:
+        type: string
+      service:
+        type: string
+      source:
+        type: string
+      json_schema:
+        type: object
+  outputDTO.SchemaDTO:
+    properties:
+      id:
+        type: string
+      schema_type:
+        type: string
+      service:
+        type: string
+      source:
+        type: string
+      json_schema:
+        type: object
+      created_at:
+        type: string
+      updated_at:
+        type: string
+  handlers.Error:
+    properties:
+      message:
+        type: string
+    type: object
+
+info:
+  description: "Lake Repository API"
+  version: "1.0.0"
+  title: "Lake Repository API"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: fabio.caffarello@gmail.com
+    name: Fabio Caffarello
+
+paths:
+  /schemas:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Schema to be created
+        required: true
+        schema:
+          $ref: "#/definitions/inputDTO.SchemaDTO"
+      responses:
+        "200":
+          description: Schema created
+          schema:
+            $ref: "#/definitions/outputDTO.SchemaDTO"
+        "400":
+          description: Bad request
+          schema:
+            $ref: "#/definitions/handlers.Error"
+        "500":
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/handlers.Error"
+
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List all schemas
+          schema:
+            $ref: "#/definitions/outputDTO.SchemaDTO"
+        "400":
+          description: Bad request
+          schema:
+            $ref: "#/definitions/handlers.Error"
+        "500":
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/handlers.Error"
+
+  /schemas/{id}:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: id
+        description: Schema id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: List schema by id
+          schema:
+            $ref: "#/definitions/outputDTO.SchemaDTO"
+        "400":
+          description: Bad request
+          schema:
+            $ref: "#/definitions/handlers.Error"
+        "500":
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/handlers.Error"
+
+  /schemas/service/{service}:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: service
+        description: Schema service
+        required: true
+        type: string
+      responses:
+        "200":
+          description: List schema by service
+          schema:
+            $ref: "#/definitions/outputDTO.SchemaDTO"
+        "400":
+          description: Bad request
+          schema:
+            $ref: "#/definitions/handlers.Error"
+        "500":
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/handlers.Error"
+
+  /schemas/service/{service}/source/{source}/schema-type/{schema_type}:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: service
+        description: Schema service
+        required: true
+        type: string
+      - in: path
+        name: source
+        description: Schema source
+        required: true
+        type: string
+      - in: path
+        name: schema_type
+        description: Schema type
+        required: true
+        type: string
+      responses:
+        "200":
+          description: List schema by service, source and schema type
+          schema:
+            $ref: "#/definitions/outputDTO.SchemaDTO"
+        "400":
+          description: Bad request
+          schema:
+            $ref: "#/definitions/handlers.Error"
+        "500":
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/handlers.Error"

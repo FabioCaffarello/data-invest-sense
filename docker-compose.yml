@@ -1,4 +1,20 @@
 version: '3'
+
+# x-common-spark-worker: &common-spark-worker
+#   image: bitnami/spark:latest
+#   depends_on:
+#     - spark
+#   environment:
+#     - SPARK_MODE=worker
+#     - SPARK_MASTER_URL=spark://spark:7077
+#     - SPARK_WORKER_MEMORY=1G
+#     - SPARK_WORKER_CORES=1
+#     - SPARK_RPC_AUTHENTICATION_ENABLED=no
+#     - SPARK_RPC_ENCRYPTION_ENABLED=no
+#     - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+#     - SPARK_SSL_ENABLED=no
+#     - SPARK_USER=spark
+
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -13,9 +29,9 @@ services:
       RABBITMQ_DEFAULT_VHOST: /
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 10s
+      interval: 15s
       timeout: 10s
-      retries: 3
+      retries: 2
     networks:
       - invest-sense-network
 
@@ -81,7 +97,7 @@ services:
     container_name: lake-controller
     ports:
       - 8002:8000
-      - 50052:50051
+      - 50054:50051
       - 4002:4000
     depends_on:
       rabbitmq:
@@ -90,7 +106,7 @@ services:
       test: ["CMD", "curl", "-f", "http://lake-controller:8000/healthz"]
       interval: 10s
       timeout: 1s
-      retries: 5
+      retries: 6
     networks:
       - invest-sense-network
 
@@ -115,6 +131,22 @@ services:
         condition: service_healthy
       lake-controller:
         condition: service_healthy
+    networks:
+      - invest-sense-network
+
+  lake-outputs:
+    image: fabiocaffarello/lake-outputs:latest
+    container_name: lake-outputs
+    ports:
+      - 8004:8000
+    networks:
+      - invest-sense-network
+
+  lake-catalog:
+    image: fabiocaffarello/lake-catalog:latest
+    container_name: lake-catalog
+    ports:
+      - 8005:8000
     networks:
       - invest-sense-network
 
@@ -182,6 +214,45 @@ services:
     networks:
       - invest-sense-network
 
+  spark-batch-master:
+    image: fabiocaffarello/transformers-spark-batch:latest
+    container_name: spark-batch-master
+    depends_on:
+      - rabbitmq
+    networks:
+      - invest-sense-network
+
+  spark:
+    image: "apache/spark:3.5.0-scala2.12-java11-r-ubuntu"
+    container_name: spark
+    command:
+      - "/opt/spark/sbin/start-connect-server.sh"
+      - "--conf"
+      - "spark.driver.extraJavaOptions=-Divy.cache.dir=/tmp -Divy.home=/tmp"
+      - "--conf"
+      - "spark.hadoop.hive.metastore.uris=thrift://hive-metastore:9083"
+      - "--packages"
+      - "org.apache.spark:spark-connect_2.12:3.5.0,org.apache.hadoop:hadoop-aws:3.3.5,com.amazonaws/aws-java-sdk-bundle/1.12.316"
+    environment:
+      - SPARK_HOME=/opt/spark
+      - SPARK_NO_DAEMONIZE=true
+      - AWS_ACCESS_KEY_ID=new-minio-root-user
+      - AWS_SECRET_ACCESS_KEY=new-minio-root-password
+    ports:
+      - "4040:4040"
+      - "15002:15002"
+    networks:
+      - invest-sense-network
+
+
+  # spark-worker-1:
+  #   container_name: spark-worker-1
+  #   <<: *common-spark-worker
+
+  # spark-worker-2:
+  #   container_name: spark-worker-2
+  #   <<: *common-spark-worker
+
   trino:
     hostname: trino
     container_name: trino
@@ -221,7 +292,6 @@ services:
       - mariadb
     networks:
       - invest-sense-network
-
 
 networks:
   invest-sense-network:
