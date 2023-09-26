@@ -27,6 +27,7 @@ class MetadataInputDTO:
 class MetadataDTO:
     input : MetadataInputDTO = field(metadata={"json_name": "input"})
     service: MetadataInputOriginDTO = field(metadata={"json_name": "service"})
+    context: str = field(metadata={"json_name": "context"})
     processing_id: str = field(metadata={"json_name": "processing_id"})
     processing_timestamp: str = field(metadata={"json_name": "processing_timestamp"})
     target_endpoint: str = field(metadata={"json_name": "target_endpoint"})

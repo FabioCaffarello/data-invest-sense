@@ -118,6 +118,7 @@ func (l *ServiceInputListener) getJobMetadataDTO(uriOrigin string, serviceInputD
 				Controller: serviceInputDTO.Metadata.Source, // inputs in file-unzipper are always from controller
 			},
 		},
+		Context: l.ContextEnv,
 		Service: eventsSharedDTO.MetadataInputOrigin{
 			Gateway:    serviceInputDTO.Metadata.Service,
 			Controller: l.ServiceName,

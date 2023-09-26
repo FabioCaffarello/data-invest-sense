@@ -23,7 +23,7 @@ func NewClient() *Client {
 }
 
 func (c *Client) CreateInput(service, source string, input inputDTO.InputDTO) (outputDTO.InputDTO, error) {
-	url := fmt.Sprintf("%s/service/%s/source/%s", c.baseURL, service, source)
+	url := fmt.Sprintf("%s/inputs/service/%s/source/%s", c.baseURL, service, source)
 	req, err := gorequest.CreateRequest(c.ctx, http.MethodPost, url, input)
 	if err != nil {
 		return outputDTO.InputDTO{}, err
@@ -38,7 +38,7 @@ func (c *Client) CreateInput(service, source string, input inputDTO.InputDTO) (o
 }
 
 func (c *Client) ListAllInputsByServiceAndSource(service, source string) ([]outputDTO.InputDTO, error) {
-	url := fmt.Sprintf("%s/service/%s/source/%s", c.baseURL, service, source)
+	url := fmt.Sprintf("%s/inputs/service/%s/source/%s", c.baseURL, service, source)
 	req, err := gorequest.CreateRequest(c.ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create HTTP request: %w", err)
@@ -53,7 +53,7 @@ func (c *Client) ListAllInputsByServiceAndSource(service, source string) ([]outp
 }
 
 func (c *Client) ListAllInputsByService(service string) ([]outputDTO.InputDTO, error) {
-	url := fmt.Sprintf("%s/service/%s", c.baseURL, service)
+	url := fmt.Sprintf("%s/inputs/service/%s", c.baseURL, service)
 	req, err := gorequest.CreateRequest(c.ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create HTTP request: %w", err)
@@ -68,7 +68,7 @@ func (c *Client) ListAllInputsByService(service string) ([]outputDTO.InputDTO, e
 }
 
 func (c *Client) ListOneInputByIdAndService(id, service, source string) (outputDTO.InputDTO, error) {
-	url := fmt.Sprintf("%s/service/%s/source/%s/%s", c.baseURL, service, source, id)
+	url := fmt.Sprintf("%s/inputs/service/%s/source/%s/%s", c.baseURL, service, source, id)
 	req, err := gorequest.CreateRequest(c.ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return outputDTO.InputDTO{}, fmt.Errorf("failed to create HTTP request: %w", err)
@@ -84,7 +84,7 @@ func (c *Client) ListOneInputByIdAndService(id, service, source string) (outputD
 
 func (c *Client) UpdateInputStatus(inputStatus inputDTO.InputStatusDTO, service string, source string, id string) (outputDTO.InputDTO, error) {
 	// id := inputStatus.ID
-	url := fmt.Sprintf("%s/service/%s/source/%s/%s", c.baseURL, service, source, id)
+	url := fmt.Sprintf("%s/inputs/service/%s/source/%s/%s", c.baseURL, service, source, id)
 	req, err := gorequest.CreateRequest(c.ctx, http.MethodPost, url, inputStatus)
 	if err != nil {
 		return outputDTO.InputDTO{}, fmt.Errorf("failed to create HTTP request: %w", err)

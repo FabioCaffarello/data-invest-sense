@@ -92,6 +92,18 @@ readme = "README.md"
     path = "libs/dtos/python/dto-gateway"
     develop = true
 
+    [tool.poetry.dependencies.encoding-normalizer]
+    path = "libs/transformers/domains/common/python/text-rules/formating/encoding-normalizer"
+    develop = true
+
+    [tool.poetry.dependencies.rename]
+    path = "libs/transformers/domains/common/python/text-rules/formating/rename"
+    develop = true
+
+    [tool.poetry.dependencies.dmn-rename-camelcase]
+    path = "libs/transformers/domains/python/text-domains/dmn-rename-camelcase"
+    develop = true
+
 [tool.poetry.group.dev.dependencies]
 flake8 = "6.0.0"
 autopep8 = "2.0.2"
@@ -99,6 +111,19 @@ pytest = "7.3.1"
 pytest-sugar = "0.9.7"
 pytest-cov = "4.1.0"
 pytest-html = "3.2.0"
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.5.3"
+mkdocs-material = "^9.4.1"
+mkdocs-material-extensions = "^1.2"
+mkdocs-autorefs = "^0.5.0"
+mkdocstrings = "^0.23.0"
+mkdocstrings-python = "^1.7.0"
+mkdocs-gen-files = "^0.5.0"
+mkdocs-literate-nav = "^0.6.1"
+mkdocs-include-markdown-plugin = "^6.0.1"
+mkdocs-swagger-ui-tag = "^0.6.5"
 
 [build-system]
 requires = [ "poetry-core" ]

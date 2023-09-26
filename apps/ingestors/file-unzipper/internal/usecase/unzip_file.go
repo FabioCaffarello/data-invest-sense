@@ -73,7 +73,7 @@ func (ufu *UnzipFileUseCase) unzipAndUpload(zipData []byte, bucketName, partitio
 		if err != nil {
 			return []string{}, err
 		}
-          documentURI := fmt.Sprintf("s3a://%s/%s/%s", ufu.minioEndpoint, bucketName, uri)
+          documentURI := fmt.Sprintf("http://%s/%s/%s", ufu.minioEndpoint, bucketName, uri)
 		uriUploadedFiles = append(uriUploadedFiles, documentURI)
 	}
 

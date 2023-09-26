@@ -22,6 +22,48 @@
     },
     "lint": {
       "executor": "@nx-go/nx-go:lint"
+    },
+    "go-tidy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go mod tidy",
+        "cwd": "apps/lake-orchestration/lake-outputs"
+      }
+    },
+    "wire": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wire",
+        "cwd": "apps/lake-orchestration/lake-outputs/cmd/server"
+      }
+    },
+    "build-go": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "go-tidy",
+        "wire"
+      ],
+      "options": {
+        "command": "GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -ldflags=\"-w -s\" -o dist/server ./cmd/server/main.go ./cmd/server/wire_gen.go",
+        "cwd": "apps/lake-orchestration/lake-outputs"
+      }
+    },
+    "image": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "build-go"
+      ],
+      "options": {
+        "command": "docker build -t fabiocaffarello/lake-outputs:latest -f ./Dockerfile.prod .",
+        "cwd": "apps/lake-orchestration/lake-outputs"
+      }
+    },
+    "swag-doc": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx --yes snippet-enricher-cli@0.0.8 --input=docs/openapi/swagger.yaml > docs/openapi/openapi.json",
+        "cwd": "apps/lake-orchestration/lake-outputs"
+      }
     }
   },
   "tags": []

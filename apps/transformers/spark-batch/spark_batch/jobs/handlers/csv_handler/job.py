@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List
 from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 import requests
 from dto_controller.output import ConfigDTO
 from dto_events.shared import StatusDTO
@@ -61,10 +62,27 @@ class Job:
         logger.info(f"Input data uri: {uri}")
         partition = self._input_data.partition
         logger.info(f"Input data partition: {partition}")
-        spark_session = SparkSession.builder.remote("sc://localhost").getOrCreate()
+        spark_session = SparkSession.builder.remote("sc://spark:15002").getOrCreate()
         logger.info("Spark session created")
-        df = spark_session.read.csv(f"{uri}/*.csv", header=True, inferSchema=True)
-        logger.info(f"Dataframe schema: {df}")
+        # df = spark_session.read.csv(f"{uri}/*.csv", header=True, inferSchema=True)
+        # logger.info(f"Dataframe schema: {df}")
+
+        # Define the schema for your DataFrame
+        schema = StructType([
+            StructField("Name", StringType(), True),
+            StructField("Age", IntegerType(), True),
+            StructField("City", StringType(), True)
+        ])
+
+        # Create the dummy data as a list of tuples
+        data = [("Alice", 25, "New York"),
+                ("Bob", 30, "San Francisco"),
+                ("Charlie", 35, "Los Angeles")]
+
+        # Create a DataFrame using the schema and data
+        spark_df = spark_session.createDataFrame(data, schema=schema)
+        logger.info(f"Spark dataframe: {spark_df}")
+        logger.info(f"Spark dataframe schema: {spark_df.schema}")
 
 
         # minio = minio_client()

@@ -1,0 +1,68 @@
+{
+  "name": "transformers-domains-python-text-domains-dmn-rename-camelcase",
+  "$schema": "../../../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/transformers/domains/python/text-domains/dmn-rename-camelcase/domain",
+  "targets": {
+    "lock": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "libs/transformers/domains/python/text-domains/dmn-rename-camelcase"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "libs/transformers/domains/python/text-domains/dmn-rename-camelcase/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:flake8",
+      "outputs": [
+        "{workspaceRoot}/reports/libs/transformers/domains/python/text-domains/dmn-rename-camelcase/pylint.txt"
+      ],
+      "options": {
+        "outputFile": "reports/libs/transformers/domains/python/text-domains/dmn-rename-camelcase/pylint.txt"
+      }
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/libs/transformers/domains/python/text-domains/dmn-rename-camelcase/unittests",
+        "{workspaceRoot}/coverage/libs/transformers/domains/python/text-domains/dmn-rename-camelcase"
+      ],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "libs/transformers/domains/python/text-domains/dmn-rename-camelcase"
+      }
+    }
+  },
+  "tags": []
+}

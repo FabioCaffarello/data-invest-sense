@@ -73,6 +73,7 @@ class Controller:
                     controller=self._config.source
                 )
             ),
+            context=self._config.context,
             service=MetadataInputOriginDTO(
                 gateway=self._config.service,
                 controller=self._config.source

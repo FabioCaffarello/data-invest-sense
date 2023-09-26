@@ -16,6 +16,7 @@ type MetadataInput struct {
 type Metadata struct {
 	Input               MetadataInput       `json:"input"`
 	Service             MetadataInputOrigin `json:"service"`
+	Context             string              `json:"context"`
 	ProcessingId        string              `json:"processing_id"`
 	ProcessingTimestamp string              `json:"processing_timestamp"`
 	TargetEndpoint      string              `json:"target_endpoint"`
@@ -23,6 +24,6 @@ type Metadata struct {
 }
 
 type Status struct {
-     Code   int    `json:"code"`
-     Detail string `json:"detail"`
+	Code   int    `json:"code"`
+	Detail string `json:"detail"`
 }

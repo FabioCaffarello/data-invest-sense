@@ -13,6 +13,7 @@ use (
 	apps/lake-orchestration/lake-repository
 	libs/api-client/golang/go-controller
 	libs/api-client/golang/go-gateway
+	libs/api-client/golang/go-outputs
 	libs/api-client/golang/go-repository
 	libs/dtos/golang/dto-controller
 	libs/dtos/golang/dto-events

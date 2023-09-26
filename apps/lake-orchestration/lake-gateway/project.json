@@ -87,6 +87,13 @@
         "command": "docker build -t fabiocaffarello/lake-gateway:latest -f ./Dockerfile.prod .",
         "cwd": "apps/lake-orchestration/lake-gateway"
       }
+    },
+    "swag-doc": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx --yes snippet-enricher-cli@0.0.8 --input=docs/openapi/swagger.yaml > docs/openapi/openapi.json",
+        "cwd": "apps/lake-orchestration/lake-gateway"
+      }
     }
   },
   "tags": ["scope:lake-orchestration", "lang:go"]

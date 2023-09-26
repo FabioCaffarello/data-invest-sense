@@ -10,6 +10,8 @@ import (
 	eventsInputDTO "libs/dtos/golang/dto-events/input"
 	gatewayInputDTO "libs/dtos/golang/dto-gateway/input"
 	gatewaySharedDTO "libs/dtos/golang/dto-gateway/shared"
+	outputsInputDTO "libs/dtos/golang/dto-lake-outputs/input"
+	outputsSharedDTO "libs/dtos/golang/dto-lake-outputs/shared"
 	configID "libs/golang/goid/config"
 
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -89,6 +91,13 @@ func (l *ServiceFeedbackListener) Handle(msg amqp.Delivery) error {
 func (l *ServiceFeedbackListener) HandleFeedback200(msg eventsInputDTO.ServiceFeedbackDTO, service string, source string) {
 	// log.Printf("ServiceFeedbackListener.HandleFeedback200: msg=%v, service=%s, source=%s", msg, service, source)
 
+	outputData := getServiceOutputDTO(msg)
+	createOutputUseCase := usecase.NewCreateOutputUseCase()
+	_, err := createOutputUseCase.Execute(service, outputData)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	findAllDependentJobUseCase := usecase.NewListAllConfigsByDependentJobUseCase()
 	createInputUseCase := usecase.NewCreateInputUseCase()
 
@@ -104,7 +113,7 @@ func (l *ServiceFeedbackListener) HandleFeedback200(msg eventsInputDTO.ServiceFe
 	inputDTO := gatewayInputDTO.InputDTO{
 		Data: map[string]interface{}{
 			"documentUri": msg.Data["documentUri"],
-               "partition": msg.Data["partition"],
+			"partition":   msg.Data["partition"],
 		},
 	}
 
@@ -136,6 +145,24 @@ func (l *ServiceFeedbackListener) HandleFeedback400(msg eventsInputDTO.ServiceFe
 
 func (l *ServiceFeedbackListener) HandleFeedback500(msg eventsInputDTO.ServiceFeedbackDTO, service string, source string) {
 
+}
+
+func getServiceOutputDTO(msg eventsInputDTO.ServiceFeedbackDTO) outputsInputDTO.ServiceOutputDTO {
+	return outputsInputDTO.ServiceOutputDTO{
+		Data:    msg.Data,
+		Context: msg.Metadata.Context,
+		Metadata: outputsSharedDTO.Metadata{
+			InputId: msg.Metadata.Input.ID,
+			Input: outputsSharedDTO.MetadataInput{
+				ID:                  msg.Metadata.Input.ID,
+				Data:                msg.Metadata.Input.Data,
+				ProcessingId:        msg.Metadata.Input.ProcessingId,
+				ProcessingTimestamp: msg.Metadata.Input.ProcessingTimestamp,
+			},
+			Service: msg.Metadata.Service.Controller,
+			Source:  msg.Metadata.Input.Source.Controller,
+		},
+	}
 }
 
 func getStatusInputDTO(msg eventsInputDTO.ServiceFeedbackDTO) gatewayInputDTO.InputStatusDTO {
