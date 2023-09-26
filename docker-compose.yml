@@ -222,26 +222,6 @@ services:
     networks:
       - invest-sense-network
 
-  # spark:
-  #   image: apache/spark:3.4.1
-  #   container_name: spark
-  #   user: root
-  #   healthcheck:
-  #     test: netstat -ltn | grep -c ":15002"
-  #     interval: 5s
-  #     retries: 120
-  #   ports:
-  #     - "15002:15002"
-  #   networks:
-  #     - invest-sense-network
-  #   environment:
-  #     - SPARK_HOME=/opt/spark
-  #     - PYSPARK_PYTHON=/usr/bin/python3.9
-  #     - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin:/opt/spark/sbin
-  #   command:
-  #     - "/opt/spark/sbin/start-connect-server.sh"
-  #     - "--packages"
-  #     - "org.apache.spark:spark-connect_2.12:3.4.1"
   spark:
     image: "apache/spark:3.5.0-scala2.12-java11-r-ubuntu"
     container_name: spark
@@ -249,35 +229,21 @@ services:
       - "/opt/spark/sbin/start-connect-server.sh"
       - "--conf"
       - "spark.driver.extraJavaOptions=-Divy.cache.dir=/tmp -Divy.home=/tmp"
+      - "--conf"
+      - "spark.hadoop.hive.metastore.uris=thrift://hive-metastore:9083"
       - "--packages"
-      - "org.apache.spark:spark-connect_2.12:3.5.0"
+      - "org.apache.spark:spark-connect_2.12:3.5.0,org.apache.hadoop:hadoop-aws:3.3.5,com.amazonaws/aws-java-sdk-bundle/1.12.316"
     environment:
       - SPARK_HOME=/opt/spark
       - SPARK_NO_DAEMONIZE=true
+      - AWS_ACCESS_KEY_ID=new-minio-root-user
+      - AWS_SECRET_ACCESS_KEY=new-minio-root-password
     ports:
       - "4040:4040"
       - "15002:15002"
     networks:
       - invest-sense-network
 
-
-
-
-  # spark:
-  #   image: bitnami/spark:latest
-  #   container_name: spark
-  #   environment:
-  #     - SPARK_MODE=master
-  #     - SPARK_RPC_AUTHENTICATION_ENABLED=no
-  #     - SPARK_RPC_ENCRYPTION_ENABLED=no
-  #     - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-  #     - SPARK_SSL_ENABLED=no
-  #     - SPARK_USER=spark
-  #   ports:
-  #     - '8089:8080'
-  #     - '8081:8081'
-  #     - '7077:7077'
-  #     - '4040:4040'
 
   # spark-worker-1:
   #   container_name: spark-worker-1
@@ -287,56 +253,45 @@ services:
   #   container_name: spark-worker-2
   #   <<: *common-spark-worker
 
-  # trino:
-  #   hostname: trino
-  #   container_name: trino
-  #   image: 'trinodb/trino:351'
-  #   ports:
-  #     - '8085:8080'
-  #   volumes:
-  #     - ./.docker/trino/etc:/usr/lib/trino/etc:ro
-  #   networks:
-  #     - invest-sense-network
+  trino:
+    hostname: trino
+    container_name: trino
+    image: 'trinodb/trino:351'
+    ports:
+      - '8085:8080'
+    volumes:
+      - ./.docker/trino/etc:/usr/lib/trino/etc:ro
+    networks:
+      - invest-sense-network
 
-  # mariadb:
-  #   hostname: mariadb
-  #   image: mariadb:10.5.8
-  #   container_name: mariadb
-  #   ports:
-  #     - 3306:3306
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: admin
-  #     MYSQL_USER: admin
-  #     MYSQL_PASSWORD: admin
-  #     MYSQL_DATABASE: metastore_db
-  #   networks:
-  #     - invest-sense-network
+  mariadb:
+    hostname: mariadb
+    image: mariadb:10.5.8
+    container_name: mariadb
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: metastore_db
+    networks:
+      - invest-sense-network
 
-  # hive-metastore:
-  #   hostname: hive-metastore
-  #   image: 'bitsondatadev/hive-metastore:latest'
-  #   container_name: hive-metastore
-  #   ports:
-  #     - '9083:9083' # Metastore Thrift
-  #   volumes:
-  #     - ./.docker/hive/conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml:ro
-  #   environment:
-  #     METASTORE_DB_HOSTNAME: mariadb
-  #   depends_on:
-  #     - mariadb
-  #   networks:
-  #     - invest-sense-network
-
-  # jupyter:
-  #   image: jupyter/base-notebook
-  #   container_name: jupyter
-  #   ports:
-  #     - '8888:8888'
-  #   volumes:
-  #     - ./notebooks:/home/jovyan/work  # Mount a directory with your Jupyter notebooks
-
-  #   environment:
-  #     - SPARK_MASTER_URL=spark://spark:7077
+  hive-metastore:
+    hostname: hive-metastore
+    image: 'bitsondatadev/hive-metastore:latest'
+    container_name: hive-metastore
+    ports:
+      - '9083:9083' # Metastore Thrift
+    volumes:
+      - ./.docker/hive/conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml:ro
+    environment:
+      METASTORE_DB_HOSTNAME: mariadb
+    depends_on:
+      - mariadb
+    networks:
+      - invest-sense-network
 
 networks:
   invest-sense-network:

@@ -62,10 +62,19 @@ class Job:
         logger.info(f"Input data uri: {uri}")
         partition = self._input_data.partition
         logger.info(f"Input data partition: {partition}")
-        spark_session = SparkSession.builder.remote("sc://spark:15002").getOrCreate()
+        spark_session = (
+            SparkSession
+            .builder
+            .remote("sc://spark:15002")
+            .config("fs.s3a.access.key", "new-minio-root-user")
+            .config("fs.s3a.secret.key", "new-minio-root-password")
+            .config("fs.s3a.endpoint", "http://minio:9000")
+            .config("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+            .config("fs.s3a.path.style.access", "true")
+            .config("fs.s3a.connection.ssl.enabled", "false")
+            .getOrCreate()
+        )
         logger.info("Spark session created")
-        # df = spark_session.read.csv(f"{uri}/*.csv", header=True, inferSchema=True)
-        # logger.info(f"Dataframe schema: {df}")
 
         # Define the schema for your DataFrame
         schema = StructType([
@@ -83,6 +92,35 @@ class Job:
         spark_df = spark_session.createDataFrame(data, schema=schema)
         logger.info(f"Spark dataframe: {spark_df}")
         logger.info(f"Spark dataframe schema: {spark_df.schema}")
+
+
+
+#         from pyspark.sql import SparkSession
+# from pyspark.sql.functions import *
+# from pyspark.sql.types import *
+# from datetime import datetime
+# from pyspark.sql import Window, functions as F
+# spark = SparkSession.builder.appName("MinioTest").getOrCreate()
+
+# spark.sparkContext._jsc\
+#      .hadoopConfiguration().set("fs.s3a.access.key", "username")
+# spark.sparkContext._jsc\
+#      .hadoopConfiguration().set("fs.s3a.secret.key", "password")
+# spark.sparkContext._jsc\
+#       .hadoopConfiguration().set("fs.s3a.endpoint", "https://minioendpoint.com/")
+# spark.sparkContext._jsc\
+#       .hadoopConfiguration().set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+# spark.sparkContext._jsc\
+#       .hadoopConfiguration().set("fs.s3a.path.style.access", "true")
+
+
+# df = spark.read.csv('s3a://bucketname/spark-operator-on-k8s/data/input/input.txt',header=True)
+# df.write.format('csv').options(delimiter='|').mode('overwrite').save('s3a://bucketname/spark-operator-on-k8s/data/output/')
+
+
+        df = spark_session.read.csv(f"{uri}/*.csv", header=True, inferSchema=True)
+        logger.info(f"Dataframe schema: {df.schema}")
+
 
 
         # minio = minio_client()
