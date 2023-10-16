@@ -32,9 +32,7 @@
     },
     "build-go": {
       "executor": "nx:run-commands",
-      "dependsOn": [
-        "go-tidy"
-      ],
+      "dependsOn": ["go-tidy"],
       "options": {
         "command": "GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -ldflags=\"-w -s\" -o dist/server ./cmd/server/main.go",
         "cwd": "apps/ingestors/file-unzipper"
@@ -42,9 +40,7 @@
     },
     "image": {
       "executor": "nx:run-commands",
-      "dependsOn": [
-        "build-go"
-      ],
+      "dependsOn": ["build-go"],
       "options": {
         "command": "docker build -t fabiocaffarello/ingestors-file-unzipper:latest --build-arg SERVICE_NAME=file-unzipper --build-arg CONTEXT_ENV={args.contextEnv} --build-arg MINIO_ENDPOINT=minio:9000 --build-arg MINIO_ACCESS_KEY=new-minio-root-user --build-arg MINIO_SECRET_KEY=new-minio-root-password -f ./Dockerfile.prod .",
         "cwd": "apps/ingestors/file-unzipper"

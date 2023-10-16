@@ -7,7 +7,8 @@ class UnrecoverableError(Exception):
 
 
 class ServiceUnavailableError(Exception):
-    pass
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
 
 
 @dataclass

@@ -23,12 +23,12 @@ readme = "README.md"
   [tool.poetry.dependencies]
   python = ">=3.9,<3.11"
   warlock = "^2.0.1"
-  pyspark = "^3.4.1"
   pandas = "^2.1.1"
   pyarrow = "^13.0.0"
   grpcio = "^1.58.0"
   protobuf = "^4.24.3"
   grpcio-status = "^1.58.0"
+  pyspark = "3.5.0"
 
     [tool.poetry.dependencies.pylog]
     path = "../../../libs/python/pylog"

@@ -14,9 +14,112 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "esModuleInterop": true,
+    "strictNullChecks": false,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "paths": {
+      "@admin-videos-catalog/core/category/application/use-cases/common": [
+        "libs/node-services/admin-videos-catalog/core/category/application/use-cases/common/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/application/use-cases/create-category": [
+        "libs/node-services/admin-videos-catalog/core/category/application/use-cases/create-category/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/application/use-cases/delete-category": [
+        "libs/node-services/admin-videos-catalog/core/category/application/use-cases/delete-category/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/application/use-cases/get-category": [
+        "libs/node-services/admin-videos-catalog/core/category/application/use-cases/get-category/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/application/use-cases/list-categories": [
+        "libs/node-services/admin-videos-catalog/core/category/application/use-cases/list-categories/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/application/use-cases/update-category": [
+        "libs/node-services/admin-videos-catalog/core/category/application/use-cases/update-category/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/entity": [
+        "libs/node-services/admin-videos-catalog/core/category/entity/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/infra/db/in-memory": [
+        "libs/node-services/admin-videos-catalog/core/category/infra/db/in-memory/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/infra/db/mongoose": [
+        "libs/node-services/admin-videos-catalog/core/category/infra/db/mongoose/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/infra/db/sequelize": [
+        "libs/node-services/admin-videos-catalog/core/category/infra/db/sequelize/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/category/repository": [
+        "libs/node-services/admin-videos-catalog/core/category/repository/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/infra/testing": [
+        "libs/node-services/admin-videos-catalog/core/infra/testing/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/application/use-case": [
+        "libs/node-services/admin-videos-catalog/core/shared/application/use-case/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/entity": [
+        "libs/node-services/admin-videos-catalog/core/shared/entity/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/errors": [
+        "libs/node-services/admin-videos-catalog/core/shared/errors/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/infra/db/in-memory": [
+        "libs/node-services/admin-videos-catalog/core/shared/infra/db/in-memory/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/infra/db/sequelize": [
+        "libs/node-services/admin-videos-catalog/core/shared/infra/db/sequelize/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/infra/testing": [
+        "libs/node-services/admin-videos-catalog/core/shared/infra/testing/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/repository": [
+        "libs/node-services/admin-videos-catalog/core/shared/repository/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/validators": [
+        "libs/node-services/admin-videos-catalog/core/shared/validators/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/value-object": [
+        "libs/node-services/admin-videos-catalog/core/shared/value-object/src/index.ts"
+      ],
+      "@admin-videos-catalog/core/shared/value-objects/uuid": [
+        "libs/node-services/admin-videos-catalog/core/shared/value-objects/uuid/src/index.ts"
+      ],
+      "@admin-videos-catalog/nest-modules/config-module": [
+        "libs/node-services/admin-videos-catalog/nest-modules/config-module/src/index.ts"
+      ],
+      "@admin-videos-catalog/nest-modules/database-module": [
+        "libs/node-services/admin-videos-catalog/nest-modules/database-module/src/index.ts"
+      ],
+      "@admin-videos-catalog/nest-modules/features/categories-module": [
+        "libs/node-services/admin-videos-catalog/nest-modules/features/categories-module/src/index.ts"
+      ],
+      "@admin-videos-catalog/nest-modules/shared-module": [
+        "libs/node-services/admin-videos-catalog/nest-modules/shared-module/src/index.ts"
+      ],
       "@data-invest-sense/repo-settings": [
         "libs/nx-plugins/repo-settings/src/index.ts"
+      ],
+      "@react-modules/features/categories/components": [
+        "libs/react-modules/features/categories/components/src/index.ts"
+      ],
+      "@react-modules/features/categories/data-access": [
+        "libs/react-modules/features/categories/data-access/src/index.ts"
+      ],
+      "@react-modules/features/categories/types": [
+        "libs/react-modules/features/categories/types/src/index.ts"
+      ],
+      "@react-modules/features/categories/ui": [
+        "libs/react-modules/features/categories/ui/src/index.ts"
+      ],
+      "@react-modules/shared/hooks": [
+        "libs/react-modules/shared/hooks/src/index.ts"
+      ],
+      "@react-modules/shared/store": [
+        "libs/react-modules/shared/store/src/index.ts"
+      ],
+      "@react-modules/shared/ui-components": [
+        "libs/react-modules/shared/ui-components/src/index.ts"
       ]
     }
   },

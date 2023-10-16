@@ -77,6 +77,7 @@ class Controller:
                 gateway=self._config.service,
                 controller=self._config.source
             ),
+            context=self._config.context,
             processing_id=self._input_body_dto.metadata["processing_id"],
             processing_timestamp=datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
             target_endpoint=target_endpoint,

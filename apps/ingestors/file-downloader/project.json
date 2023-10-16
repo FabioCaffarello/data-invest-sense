@@ -25,9 +25,7 @@
     },
     "build": {
       "executor": "@nxlv/python:build",
-      "outputs": [
-        "{projectRoot}/dist"
-      ],
+      "outputs": ["{projectRoot}/dist"],
       "options": {
         "outputPath": "apps/ingestors/file-downloader/dist",
         "publish": false,
@@ -89,8 +87,8 @@
       }
     },
     "minio-buckets": {
-        "executor": "@data-invest-sense/repo-settings:minio-buckets",
-        "cwd": "apps/ingestors/file-downloader"
+      "executor": "@data-invest-sense/repo-settings:minio-buckets",
+      "cwd": "apps/ingestors/file-downloader"
     }
   },
   "tags": ["scope:lake-ingestors", "lang:python"]

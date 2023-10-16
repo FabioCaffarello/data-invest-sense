@@ -1,0 +1,70 @@
+{
+  "name": "products-back-end-admin-videos-catalog",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/products/back-end/admin-videos-catalog/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/products/back-end/admin-videos-catalog",
+        "main": "apps/products/back-end/admin-videos-catalog/src/main.ts",
+        "tsConfig": "apps/products/back-end/admin-videos-catalog/tsconfig.app.json",
+        "assets": ["apps/products/back-end/admin-videos-catalog/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/products/back-end/admin-videos-catalog/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "products-back-end-admin-videos-catalog:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "products-back-end-admin-videos-catalog:build:development"
+        },
+        "production": {
+          "buildTarget": "products-back-end-admin-videos-catalog:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/products/back-end/admin-videos-catalog/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/products/back-end/admin-videos-catalog/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "image": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/products/back-end/admin-videos-catalog/Dockerfile . -t products-back-end-admin-videos-catalog"
+    }
+  },
+  "tags": []
+}
