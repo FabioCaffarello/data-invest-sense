@@ -1,0 +1,35 @@
+{
+  "name": "products-front-end-midiaflix-e2e",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/products/front-end/midiaflix-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/products/front-end/midiaflix-e2e/cypress.config.ts",
+        "devServerTarget": "products-front-end-midiaflix:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "products-front-end-midiaflix:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "products-front-end-midiaflix:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/products/front-end/midiaflix-e2e/**/*.{js,ts}"
+        ]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["products-front-end-midiaflix"]
+}
